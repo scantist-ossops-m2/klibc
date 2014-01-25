@@ -37,7 +37,7 @@ __syscall_common:
 #endif
 	.globl __syscall_common_tail
 __syscall_common_tail:
-	int	$0x80
+	call	*__syscall_entry
 
 	cmpl	$-4095,%eax
 
@@ -66,3 +66,17 @@ __syscall_common_tail:
 __syscall_varadic = __syscall_common
 
 #endif
+
+	.align	4
+__syscall_int80:
+	int	$0x80
+	ret
+	.type	__syscall_int80,@function
+	.size	__syscall_int80,.-__syscall_int80
+
+	.data
+	.align	4
+	.globl	__syscall_entry
+__syscall_entry:
+	.long	__syscall_int80
+	.size	__syscall_entry,.-__syscall_entry

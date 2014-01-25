@@ -90,6 +90,15 @@ __noreturn __libc_init(uintptr_t * elfdata, void (*onexit) (void))
 
 	__page_size = page_size = __auxval[AT_PAGESZ];
 
+#ifdef __i386__
+	{
+		extern void (*__syscall_entry)(int, ...);
+		if (__auxval[AT_SYSINFO])
+			__syscall_entry = (void (*)(int, ...))
+				__auxval[AT_SYSINFO];
+	}
+#endif
+
 #if __GNUC__ >= 4
 	/* unsigned int is 32 bits on all our architectures */
 	page_shift = __builtin_clz(page_size) ^ 31;

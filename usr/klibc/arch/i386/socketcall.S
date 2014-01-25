@@ -32,7 +32,7 @@ __socketcall_common:
 #endif
 
 	movl	$__NR_socketcall,%eax
-	int	$0x80
+	call	*__syscall_entry
 
 #ifdef	_REGPARM
 	addl	$6*4, %esp
