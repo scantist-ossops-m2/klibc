@@ -107,6 +107,8 @@
 #define AT_CLKTCK 	17	/* frequency at which times() increments */
 /* 18..22 = ? */
 #define AT_SECURE 	23	/* secure mode boolean */
+#define AT_SYSINFO	32	/* vdso entry point address */
+#define AT_SYSINFO_EHDR	33	/* vdso header address */
 
 /* Program header permission flags */
 #define PF_X            0x1

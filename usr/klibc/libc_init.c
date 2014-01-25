@@ -24,6 +24,7 @@
 #include <stdint.h>
 #include <klibc/compiler.h>
 #include <elf.h>
+#include <sys/auxv.h>
 #include "atexit.h"
 
 /* This file is included from __static_init.c or __shared_init.c */
@@ -35,11 +36,13 @@ char **environ;
 unsigned int __page_size, __page_shift;
 
 struct auxentry {
-	uintptr_t type;
-	uintptr_t v;
+	unsigned long type;
+	unsigned long v;
 };
 
 extern void __init_stdio(void);
+
+unsigned long __auxval[_AUXVAL_MAX];
 
 __noreturn __libc_init(uintptr_t * elfdata, void (*onexit) (void))
 {
@@ -76,20 +79,16 @@ __noreturn __libc_init(uintptr_t * elfdata, void (*onexit) (void))
 	auxentry = (struct auxentry *)(envend + 1);
 
 	while (auxentry->type) {
-		switch (auxentry->type) {
-#if SHARED
-		case AT_ENTRY:
-			MAIN = (main_t) (auxentry->v);
-			break;
-#endif
-		case AT_PAGESZ:
-			page_size = (unsigned int)(auxentry->v);
-			break;
-		}
+		if (auxentry->type < _AUXVAL_MAX)
+			__auxval[auxentry->type] = auxentry->v;
 		auxentry++;
 	}
 
-	__page_size = page_size;
+#if SHARED
+	MAIN = (main_t) __auxval[AT_ENTRY];
+#endif
+
+	__page_size = page_size = __auxval[AT_PAGESZ];
 
 #if __GNUC__ >= 4
 	/* unsigned int is 32 bits on all our architectures */
