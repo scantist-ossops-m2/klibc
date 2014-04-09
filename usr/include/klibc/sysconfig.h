@@ -216,4 +216,13 @@
 # define _KLIBC_ARM_USE_BX 0
 #endif
 
+/*
+ * _KLIBC_HAS_ARCHINIT
+ *
+ *	This architecture uses __libc_archinit()
+ */
+#ifndef _KLIBC_HAS_ARCHINIT
+# define _KLIBC_HAS_ARCHINIT 0
+#endif
+
 #endif /* _KLIBC_SYSCONFIG_H */

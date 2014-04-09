@@ -48,7 +48,7 @@ err:
 	return NULL;
 }
 
-void __init_stdio(void)
+void __libc_init_stdio(void)
 {
 	stdin  = fdopen(0, NULL);
 	stdout = fdopen(1, NULL);
