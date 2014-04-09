@@ -2,6 +2,7 @@
 #define _SYS_AUXV_H
 
 #include <klibc/compiler.h>
+#include <klibc/extern.h>
 #include <elf.h>
 
 #define _AUXVAL_MAX	AT_SYSINFO_EHDR
