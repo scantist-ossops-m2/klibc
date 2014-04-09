@@ -59,6 +59,7 @@ size_t _fwrite(const void *buf, size_t count, FILE *file)
 	size_t bytes = 0;
 	size_t pf_len, pu_len;
 	const char *p = buf;
+	const char *q;
 
 	/* We divide the data into two chunks, flushed (pf)
 	   and unflushed (pu) depending on buffering mode
@@ -67,23 +68,16 @@ size_t _fwrite(const void *buf, size_t count, FILE *file)
 	switch (f->bufmode) {
 	case _IOFBF:
 		pf_len = 0;
-		pu_len = count;
 		break;
 
 	case _IOLBF:
-		pf_len = count;
-		pu_len = 0;
-
-		while (pf_len && p[pf_len-1] != '\n') {
-			pf_len--;
-			pu_len++;
-		}
+		q = memrchr(p, '\n', count);
+		pf_len = q ? q - p + 1 : 0;
 		break;
 
 	case _IONBF:
 	default:
 		pf_len = count;
-		pu_len = 0;
 		break;
 	}
 
@@ -94,6 +88,7 @@ size_t _fwrite(const void *buf, size_t count, FILE *file)
 			return bytes;
 	}
 
+	pu_len = count - pf_len;
 	if (pu_len)
 		bytes += fwrite_noflush(p, pu_len, f);
 
