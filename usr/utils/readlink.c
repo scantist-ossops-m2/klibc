@@ -29,8 +29,8 @@ int main(int argc, char *argv[])
 			perror(name);
 			exit(1);
 		}
-		link_name[rv] = '\0';
-		puts(link_name);
+		link_name[rv] = '\n';
+		_fwrite(link_name, rv+1, stdout);
 	}
 
 	return 0;
