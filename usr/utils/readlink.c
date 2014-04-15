@@ -13,8 +13,9 @@ static __noreturn usage(void)
 
 int main(int argc, char *argv[])
 {
-	char *name, *link_name = NULL;
-	size_t max_siz = 128;
+	const char *name;
+	char link_name[PATH_MAX];
+	int rv;
 
 	progname = *argv++;
 
@@ -22,15 +23,12 @@ int main(int argc, char *argv[])
 	if (!name)
 		usage();
 
-	link_name = malloc(max_siz);
-	if (!link_name) {
-		perror("malloc");
+	rv = readlink(name, link_name, sizeof link_name - 1);
+	if (rv < 0) {
+		perror(name);
 		exit(1);
 	}
-
-	if (readlink(name, link_name, max_siz) == -1)
-		exit(1);
-	printf("%s\n", link_name);
-
+	link_name[rv] = '\0';
+	puts(link_name);
 	exit(0);
 }
