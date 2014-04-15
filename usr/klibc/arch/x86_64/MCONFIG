@@ -15,12 +15,12 @@
 # debugging using gdb.
 #
 KLIBCARCHREQFLAGS = -m64
+KLIBCOPTFLAGS	+= -Os -fomit-frame-pointer -mno-sse \
+		-falign-functions=1 -falign-jumps=1 -falign-loops=1
 ifeq ($(DEBUG),y)
-KLIBCOPTFLAGS     += -g -Os -fomit-frame-pointer \
-		-falign-functions=1 -falign-jumps=1 -falign-loops=1
+KLIBCOPTFLAGS     += -g
 else
-KLIBCOPTFLAGS     += -Os -fno-asynchronous-unwind-tables -fomit-frame-pointer \
-		-falign-functions=1 -falign-jumps=1 -falign-loops=1
+KLIBCOPTFLAGS     += -fno-asynchronous-unwind-tables
 endif
 KLIBCBITSIZE      = 64
 KLIBCLDFLAGS      = -m elf_x86_64
