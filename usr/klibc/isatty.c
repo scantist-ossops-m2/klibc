@@ -8,8 +8,9 @@
 
 int isatty(int fd)
 {
-	int dummy;
+	struct termios dummy;
 
 	/* All ttys support TIOCGPGRP */
-	return !ioctl(fd, TIOCGPGRP, &dummy);
+	/* except /dev/console which needs TCGETS */
+	return !ioctl(fd, TCGETS, &dummy);
 }
