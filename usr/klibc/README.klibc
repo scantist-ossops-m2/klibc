@@ -10,8 +10,11 @@ this:
 a) Extract a recent Linux kernel into a directory and run
    "make headers_install".
    Now enter the klibc dir and point KLIBCKERNELSRC to the
-   path of the configured linux tree
+   usr subdirectory of the configured linux tree
    "make  KLIBCKERNELSRC=`pwd`/../linux/usr/".
+
+   It is also possible to install the kernel headers elsewhere and
+   point to them there.
 
 
 b) If you're cross-compiling, you need to set KLIBCARCH to the
@@ -45,7 +48,7 @@ b) If you're cross-compiling, you need to set KLIBCARCH to the
    m32r:	 Untested
    m68k:	 Working
    mips:	 Working
-   mips64:	 Not yet ported
+   mips64:	 Working
    parisc:	 Untested
    parisc64:	 Not yet ported
    ppc:		 Working
