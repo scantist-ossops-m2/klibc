@@ -83,7 +83,14 @@ static __inline__ void srandom(unsigned int __s)
 
 __extern int unlockpt(int);
 __extern char *ptsname(int);
-__extern int posix_openpt(int);
+
+static __inline__ int posix_openpt(int __mode)
+{
+	__extern int open(const char *, int, ...);
+
+	__mode &= ~(O_CREAT | O_TMPFILE);
+	return open("/dev/ptmx", __mode);
+}
 
 static __inline__ int grantpt(int __fd)
 {

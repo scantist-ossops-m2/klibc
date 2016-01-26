@@ -52,7 +52,7 @@ klib-y += vsnprintf.o snprintf.o vsprintf.o sprintf.o \
 	  getenv.o setenv.o putenv.o __put_env.o unsetenv.o \
 	  clearenv.o nullenv.o \
 	  getopt.o getopt_long.o readdir.o scandir.o alphasort.o remove.o \
-	  syslog.o closelog.o pty.o posix_openpt.o isatty.o reboot.o \
+	  syslog.o closelog.o pty.o isatty.o reboot.o \
 	  time.o utime.o lseek.o nice.o getpriority.o \
 	  qsort.o bsearch.o \
 	  lrand48.o jrand48.o mrand48.o nrand48.o srand48.o seed48.o \
