@@ -21,7 +21,7 @@ static size_t fwrite_noflush(const void *buf, size_t count,
 
 		if (count >= f->bufsiz) {
 			/*
-			 * The the write is large, so bypass
+			 * The write is large, so bypass
 			 * buffering entirely.
 			 */
 			rv = write(f->pub._IO_fileno, p, count);
