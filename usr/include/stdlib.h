@@ -10,6 +10,7 @@
 #include <stddef.h>
 
 #include <malloc.h>
+#include <fcntl.h>
 
 #define EXIT_FAILURE 1
 #define EXIT_SUCCESS 0
