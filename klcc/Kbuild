@@ -7,7 +7,7 @@ always := $(KLIBCCROSS)klcc
 $(obj)/$(KLIBCCROSS)klibc.config: $(src)/Kbuild \
 				  $(srctree)/Makefile \
                                   $(srctree)/scripts/Kbuild.klibc
-	@echo '  GEN     $@'
+	@$(kecho) '  GEN     $@'
 	$(Q)rm -f $@
 	$(Q)echo 'ARCH=$(KLIBCARCH)' >> $@
 	$(Q)echo 'ARCHDIR=$(KLIBCARCHDIR)' >> $@
