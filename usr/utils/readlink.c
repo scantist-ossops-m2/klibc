@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
 	const char *name;
 	char link_name[PATH_MAX];
 	int rv;
-	int i;
 
 	progname = argv[0];
 
