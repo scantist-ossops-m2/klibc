@@ -14,7 +14,7 @@
 SHLIBDIR = /lib
 
 # First rule
-.PHONY: __install install-rule
+PHONY := __install install-rule
 __install:
 
 # Install commands
@@ -64,7 +64,7 @@ else
 endif
 
 # Descending
-.PHONY: $(subdir-)
+PHONY += $(subdir-)
 $(subdir-):
 	$(Q)$(MAKE) KLIBC_INSTALL=1 \
 	            -f $(srctree)/scripts/Kbuild.install obj=$@
@@ -84,7 +84,7 @@ else
 # 1) Create directories, install headers and man pages
 # 2) Tell that we now install binaries
 # 3) Install binaries by descending
-.PHONY: header footer descend
+PHONY += header footer descend
 header:
 	$(Q)echo "  INSTALL headers + man pages to $(INSTALLROOT)$(INSTALLDIR)"
 	$(Q)mkdir -p $(INSTALLROOT)$(bindir)
@@ -111,3 +111,7 @@ descend: footer
 __install: descend
 	@:
 endif
+
+# Declare the contents of the PHONY variable as phony.  We keep the variable for
+# if_changed.
+.PHONY: $(PHONY)

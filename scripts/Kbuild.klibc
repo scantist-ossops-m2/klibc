@@ -54,7 +54,7 @@ src := $(obj)
 # Preset target and make sure it is a ':=' variable
 targets :=
 
-.phony: __build
+PHONY := __build
 __build:
 
 # Read .config if it exist, otherwise ignore
@@ -374,7 +374,7 @@ endif
 # Descending
 # ---------------------------------------------------------------------------
 
-.PHONY: $(subdir-y) $(kprog-dirs) $(klib-dirs)
+PHONY += $(subdir-y) $(kprog-dirs) $(klib-dirs)
 $(sort $(subdir-y) $(kprog-dirs) $(klib-dirs)): $(lib-target)
 	$(Q)$(MAKE) $(klibc)=$@
 
@@ -419,3 +419,7 @@ endif
 # Usage:
 # $(Q)$(MAKE) $(klibc)=dir
 klibc := -rR -f $(srctree)/scripts/Kbuild.klibc obj
+
+# Declare the contents of the PHONY variable as phony.  We keep the variable for
+# if_changed.
+.PHONY: $(PHONY)
