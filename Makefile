@@ -99,10 +99,10 @@ $(objtree)/.config: $(srctree)/defconfig
 	@false
 
 $(KLIBCKERNELSRC):
-	@echo "Cannot find kernel sources."
-	@echo "Either make a 'linux' symlink point to a kernel tree "
-	@echo "configured for the $(KLIBCARCH) architecture or specify "
-	@echo "KLIBCKERNELSRC=<path> to the build."
+	@echo "Cannot find kernel UAPI headers."
+	@echo "Either make a 'linux' symlink point to the usr subdirectory "
+	@echo "of a kernel tree with headers installed for the $(KLIBCARCH) "
+	@echo "architecture or specify KLIBCKERNELSRC=<path>."
 	@false
 
 rpmbuild = $(shell which rpmbuild 2>/dev/null || which rpm)
@@ -133,7 +133,7 @@ help:
 	@echo	'test		- Run klibc tests'
 	@echo
 	@echo	'Build options:'
-	@echo	'KLIBCKERNELSRC - Path to a configured linux tree'
+	@echo	'KLIBCKERNELSRC - Path to usr directory containing UAPI headers'
 	@echo	'make V=0|1 [targets] 0 => quiet build (default), 1 => verbose build'
 	@echo	'make V=2   [targets] 2 => give reason for rebuild of target'
 	@echo
