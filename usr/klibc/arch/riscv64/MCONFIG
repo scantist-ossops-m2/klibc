@@ -18,5 +18,3 @@ KLIBCBITSIZE      = 64
 
 # Normal binaries start at 64 KB, so start the libary at 2 MB.
 KLIBCSHAREDFLAGS  =-Ttext 0x00200200
-
-KLIBCARCHINCFLAGS = -I$(KLIBCKERNELOBJ)/arch/riscv/include

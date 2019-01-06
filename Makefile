@@ -11,7 +11,6 @@ export VERSION := $(shell cat $(srctree)/$(KLIBCSRC)/version)
 export KLIBCINC := usr/include
 export KLIBCOBJ := usr/klibc
 export KLIBCKERNELSRC ?= linux
-export KLIBCKERNELOBJ ?= $(KLIBCKERNELSRC)
 
 export VPATH := $(srctree)
 
@@ -135,7 +134,6 @@ help:
 	@echo
 	@echo	'Build options:'
 	@echo	'KLIBCKERNELSRC - Path to a configured linux tree'
-	@echo	'KLIBCKERNELOBJ - Path to kernel output dir (defaults to KLIBCKERNELSRC)'
 	@echo	'make V=0|1 [targets] 0 => quiet build (default), 1 => verbose build'
 	@echo	'make V=2   [targets] 2 => give reason for rebuild of target'
 	@echo
