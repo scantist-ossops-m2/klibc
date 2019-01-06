@@ -112,10 +112,10 @@ klibc.spec: klibc.spec.in $(KLIBCSRC)/version
 	sed -e 's/@@VERSION@@/$(VERSION)/g' < $< > $@
 
 # Build klcc - it is the first target
-klcc: $(objtree)/.config
+klcc: $(objtree)/.config $(KLIBCKERNELSRC)
 	$(Q)$(MAKE) $(klibc)=klcc
 
-klibc: $(objtree)/.config
+klibc: $(objtree)/.config $(KLIBCKERNELSRC)
 	$(Q)$(MAKE) $(klibc)=.
 
 test: klibc
