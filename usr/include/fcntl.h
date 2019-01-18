@@ -13,6 +13,9 @@
 # include <klibc/archfcntl.h>
 #endif
 #include <linux/fcntl.h>
+#include <bitsize.h>
+
+#if _BITSIZE == 32
 
 /* This is ugly, but "struct flock" has actually been defined with
    a long off_t, so it's really "struct flock64".  It just happens
@@ -34,6 +37,8 @@
 # undef F_SETLKW
 # define F_SETLKW F_SETLKW64
 #endif
+
+#endif /* _BITSIZE == 32 */
 
 /* This is defined here as well as in <unistd.h> */
 #ifndef _KLIBC_IN_OPEN_C
