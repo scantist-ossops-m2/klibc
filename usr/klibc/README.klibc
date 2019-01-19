@@ -45,7 +45,6 @@ b) If you're cross-compiling, you need to set KLIBCARCH to the
    h8300:	 Not yet ported
    i386:	 Working
    ia64:	 Working static, shared untested
-   m32r:	 Untested
    m68k:	 Working
    mips:	 Working
    mips64:	 Working
