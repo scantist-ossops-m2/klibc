@@ -34,4 +34,7 @@ subdir- := fstype ipconfig nfsmount resume run-init
 
 
 # install binary
-install-y := kinit kinit.shared
+install-y := kinit
+ifdef KLIBCSHAREDFLAGS
+install-y += kinit.shared
+endif

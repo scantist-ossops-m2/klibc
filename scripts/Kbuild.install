@@ -33,8 +33,15 @@ ifeq ($(KLIBC_INSTALL),1)
 # Reset variables (to get right type of assingment)
 subdir- :=
 
+# Read .config if it exist, otherwise ignore
+-include $(objtree)/.config
+
 # Include Kbuild file
 include $(srctree)/scripts/Kbuild.include
+
+# Arch specific definitions for klibc
+include $(srctree)/$(KLIBCSRC)/arch/$(KLIBCARCHDIR)/MCONFIG
+
 include $(srctree)/$(obj)/Kbuild
 
 # Directories to visit

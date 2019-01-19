@@ -91,7 +91,10 @@ SOHASH   := klibc.so
 CRT0     := arch/$(KLIBCARCHDIR)/crt0.o
 INTERP_O := interp.o
 
-always   := $(LIBC) $(SOLIB) $(SOHASH) $(INTERP_O)
+always   := $(LIBC)
+ifdef KLIBCSHAREDFLAGS
+always   += $(SOLIB) $(SOHASH) $(INTERP_O)
+endif
 LIBC     := $(call objectify,$(LIBC))
 SOLIB    := $(call objectify,$(SOLIB))
 SOHASH   := $(call objectify,$(SOHASH))
@@ -181,10 +184,15 @@ $(INTERP_O): $(obj)/interp.S $(SOLIB).hash
 # Install klibc
 install-rule:
 	@echo "  INSTALL klibc to $(INSTALLROOT)$(INSTALLDIR)/$(KLIBCCROSS)lib"
-	$(Q)$(foreach f, $(LIBC) $(SOLIB) $(CRT0) $(INTERP_O), \
+	$(Q)$(foreach f, $(LIBC) $(CRT0), \
+	  $(shell $(install-data) $(f) \
+	          $(INSTALLROOT)$(INSTALLDIR)/$(KLIBCCROSS)lib))
+ifdef KLIBCSHAREDFLAGS
+	$(Q)$(foreach f, $(SOLIB) $(INTERP_O), \
 	  $(shell $(install-data) $(f) \
 	          $(INSTALLROOT)$(INSTALLDIR)/$(KLIBCCROSS)lib))
 	$(Q)$(install-lib) $(obj)/klibc-$(SOLIBHASH).so \
 	                      $(INSTALLROOT)$(INSTALLDIR)/$(KLIBCCROSS)lib
 	$(Q)$(install-lib) $(obj)/klibc-$(SOLIBHASH).so \
 	                      $(INSTALLROOT)$(SHLIBDIR)
+endif

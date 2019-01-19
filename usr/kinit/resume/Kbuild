@@ -27,4 +27,8 @@ shared/resume-lib := ../lib.a
 clean-dirs := static shared
 
 # install binary
+ifdef KLIBCSHAREDFLAGS
 install-y := $(shared-y)
+else
+install-y := $(static-y)
+endif

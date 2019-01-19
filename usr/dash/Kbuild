@@ -93,4 +93,8 @@ $(obj)/syntax.h: $(obj)/syntax.c
 	$(Q):
 
 # Targets to install
+ifdef KLIBCSHAREDFLAGS
 install-y := sh.shared
+else
+install-y := sh
+endif

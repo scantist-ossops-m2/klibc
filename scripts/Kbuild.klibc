@@ -304,7 +304,10 @@ ifdef kprogs
 # Compile klibc-programs for the target
 # ===========================================================================
 
-__build : $(kprog-dirs) $(static-y) $(shared-y)
+__build : $(kprog-dirs) $(static-y)
+ifdef KLIBCSHAREDFLAGS
+__build : $(shared-y)
+endif
 
 # Descend if needed
 $(sort $(addsuffix /lib.a,$(kprog-dirs))): $(kprog-dirs) ;
