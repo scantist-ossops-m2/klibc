@@ -4,8 +4,8 @@ Version: @@VERSION@@
 Release: 1
 License: BSD/GPL
 Group: Development/Libraries
-URL: http://www.zytor.com/mailman/listinfo/klibc
-Source: http://www.kernel.org/pub/linux/libs/klibc-%{version}.tar.gz
+URL: https://www.zytor.com/mailman/listinfo/klibc
+Source: https://www.kernel.org/pub/linux/libs/klibc/2.0/klibc-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: kernel >= 2.6.0, kernel-devel
 Packager: H. Peter Anvin <hpa@zytor.com>
