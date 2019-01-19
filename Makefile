@@ -182,4 +182,4 @@ install: all
 # This does all the prep work needed to turn a freshly exported git repository
 # into a release tarball tree
 release: klibc.spec
-	rm -f maketar.sh .config
+	rm -f .config
