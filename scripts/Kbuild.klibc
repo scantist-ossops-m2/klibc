@@ -100,7 +100,7 @@ KLIBCAR          := $(AR)
 klibc-ar = $(KLIBCAR) $(if $(KBUILD_REPRODUCIBLE),$(2),$(1))
 
 KLIBCRANLIB      := $(call klibc-ar,s,Ds)
-KLIBCSTRIP       := $(STRIP)
+KLIBCSTRIP       := $(if $(CONFIG_DEBUG_INFO),true,$(STRIP))
 KLIBCNM          := $(NM)
 KLIBCOBJCOPY     := $(OBJCOPY)
 KLIBCOBJDUMP     := $(OBJDUMP)
@@ -135,6 +135,10 @@ KLIBCCRTSHARED   := $(KLIBCOBJ)/interp.o
 KLIBCLIBCSHARED  := $(KLIBCOBJ)/libc.so
 # How to tell the linker main() is the entrypoint
 KLIBCEMAIN	 ?= -e main
+
+ifdef CONFIG_DEBUG_INFO
+KLIBCLDFLAGS     += --build-id=sha1
+endif
 
 #
 # This indicates the location of the final version of the shared library.
