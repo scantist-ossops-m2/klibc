@@ -68,7 +68,8 @@ include $(srctree)/scripts/Kbuild.include
 
 KLIBCREQFLAGS     := $(call cc-option, -fno-stack-protector, ) \
                      $(call cc-option, -fwrapv, ) \
-                     $(call cc-option, -fno-PIE, )
+                     $(call cc-option, -fno-PIE, ) \
+                     -ggdb
 KLIBCARCHREQFLAGS :=
 KLIBCOPTFLAGS     :=
 KLIBCWARNFLAGS    := -W -Wall -Wno-sign-compare -Wno-unused-parameter
