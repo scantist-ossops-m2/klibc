@@ -107,7 +107,8 @@ SOLIBHASH = $(shell cat $(SOLIB).hash)
 # Readable errormessages extracted from src..
 targets += errlist.c
 quiet_cmd_errlist = GEN     $@
-      cmd_errlist = $(PERL) $< $(KLIBCCPPFLAGS) -errlist > $@ || rm -f $@
+      cmd_errlist = $(PERL) $< $(call flags,KLIBCCPPFLAGS) -errlist > $@ \
+                    || rm -f $@
 
 $(obj)/errlist.c: $(srctree)/$(src)/makeerrlist.pl
 	$(call cmd,errlist)
