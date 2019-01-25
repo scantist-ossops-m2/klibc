@@ -4,7 +4,7 @@ SRCROOT = .
 # To see a list of typical targets execute "make help"
 
 # kbuild compatibility
-export srctree  := $(shell pwd)
+export srctree  := $(or $(KBUILD_SRC),$(shell pwd))
 export objtree  := $(shell pwd)
 export KLIBCSRC := usr/klibc
 export VERSION := $(shell cat $(srctree)/$(KLIBCSRC)/version)
