@@ -99,10 +99,10 @@ $(objtree)/.config: $(srctree)/defconfig
 	@false
 
 $(KLIBCKERNELSRC)/include:
-	@echo "Cannot find kernel UAPI headers."
-	@echo "Either make a 'linux' symlink point to the usr subdirectory "
-	@echo "of a kernel tree with headers installed for the $(KLIBCARCH) "
-	@echo "architecture or specify KLIBCKERNELSRC=<path>."
+	@echo 'Missing kernel UAPI headers in $(KLIBCKERNELSRC)/include.'
+	@echo 'Install them by running:'
+	@echo '    make headers_install INSTALL_HDR_PATH=$(abspath $(KLIBCKERNELSRC))'
+	@echo 'in the kernel source directory.'
 	@false
 
 rpmbuild = $(shell which rpmbuild 2>/dev/null || which rpm)

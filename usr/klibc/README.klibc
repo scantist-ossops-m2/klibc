@@ -9,17 +9,13 @@ work in progress, and a lot of things are still missing.
 Building
 ========
 
-The build procedure is not very polished yet, but it should work like
-this:
+The build procedure is not very polished yet, but for a native build
+with the default configuration it should be simple:
 
-Extract a recent Linux kernel into a directory and run
-"make headers_install".
-Now enter the klibc dir and point KLIBCKERNELSRC to the
-usr subdirectory of the configured linux tree
-"make  KLIBCKERNELSRC=`pwd`/../linux/usr/".
-
-It is also possible to install the kernel headers elsewhere and
-point to them there.
+1. In a recent Linux kernel source directory, run:
+       make headers_install INSTALL_HDR_PATH=<klibc-source-dir>/linux
+2. In the klibc source directory, run:
+       make
 
 Cross-compiling
 ---------------
@@ -39,6 +35,17 @@ to be better tested.
 If you are on ARM, and want to build a thumb version of the library
 (this is supported), change OPTFLAGS in arch/arm/MCONFIG to build
 thumb code.
+
+Building without kernel source
+------------------------------
+
+If you already have a copy of the current kernel UAPI headers, you
+don't need the kernel source as well.  You can either:
+
+1. Copy or link to the UAPI headers so that they appear under the
+   "linux/include" subdirectory.
+2. Set the KLIBCKERNELSRC variable on the "make" command line to
+   point to the *parent* of the UAPI headers directory.
 
 Architecture support
 ====================
