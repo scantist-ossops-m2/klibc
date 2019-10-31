@@ -18,8 +18,7 @@
 #include <sys/mman.h>
 #include <sys/sysmacros.h>
 #include <stdarg.h>
-
-#include "loop.h"
+#include <linux/loop.h>
 
 extern int verbose;
 extern char *progname;
