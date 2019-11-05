@@ -95,51 +95,26 @@ is_loop_device (const char *device) {
 
 char * find_unused_loop_device (void)
 {
-	/* Just creating a device, say in /tmp, is probably a bad idea -
-	   people might have problems with backup or so.
-	   So, we just try /dev/loop[0-7]. */
 	char dev[20];
-	char *loop_formats[] = { "/dev/loop%d", "/dev/loop/%d" };
-	int i, j, fd, somedev = 0, someloop = 0, permission = 0;
-	struct stat statbuf;
-	struct loop_info loopinfo;
+	int fd, rc;
 
-	for (j = 0; j < SIZE(loop_formats); j++) {
-		for(i = 0; i < 256; i++) {
-			sprintf(dev, loop_formats[j], i);
-			if (stat (dev, &statbuf) == 0 && S_ISBLK(statbuf.st_mode)) {
-				somedev++;
-				fd = open (dev, O_RDONLY);
-				if (fd >= 0) {
-					if(ioctl (fd, LOOP_GET_STATUS, &loopinfo) == 0)
-						someloop++;		/* in use */
-					else if (errno == ENXIO) {
-						close (fd);
-						return xstrdup(dev);/* probably free */
-					}
-					close (fd);
-				} else if (errno == EACCES)
-					permission++;
-
-				continue;/* continue trying as long as devices exist */
-			}
-			break;
-		}
+	fd = open("/dev/loop-control", O_RDWR);
+	if (fd < 0) {
+		error("%s: could not open /dev/loop-control. Maybe this kernel "
+		      "does not know\n"
+		      "       about the loop device? (If so, recompile or "
+		      "`modprobe loop'.)", progname);
+		return NULL;
+	}
+	rc = ioctl(fd, LOOP_CTL_GET_FREE, 0);
+	close(fd);
+	if (rc < 0) {
+		error("%s: could not find any free loop device", progname);
+		return NULL;
 	}
 
-	if (!somedev)
-		error("%s: could not find any device /dev/loop#", progname);
-	else if (!someloop && permission)
-		error("%s: no permission to look at /dev/loop#", progname);
-	else if (!someloop)
-		error(
-		    "%s: Could not find any loop device. Maybe this kernel "
-		    "does not know\n"
-		    "       about the loop device? (If so, recompile or "
-		    "`modprobe loop'.)", progname);
-	else
-		error("%s: could not find any free loop device", progname);
-	return 0;
+	sprintf(dev, "/dev/loop%d", rc);
+	return xstrdup(dev);
 }
 
 /*
