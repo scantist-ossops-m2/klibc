@@ -33,39 +33,8 @@ void xstrncpy(char *dest, const char *src, size_t n)
 }
 
 
-static int loop_info64_to_old(const struct loop_info64 *info64, struct loop_info *info)
-{
-	memset(info, 0, sizeof(*info));
-	info->lo_number = info64->lo_number;
-	info->lo_device = info64->lo_device;
-	info->lo_inode = info64->lo_inode;
-	info->lo_rdevice = info64->lo_rdevice;
-	info->lo_offset = info64->lo_offset;
-	info->lo_encrypt_type = info64->lo_encrypt_type;
-	info->lo_encrypt_key_size = info64->lo_encrypt_key_size;
-	info->lo_flags = info64->lo_flags;
-	info->lo_init[0] = info64->lo_init[0];
-	info->lo_init[1] = info64->lo_init[1];
-	if (info->lo_encrypt_type == LO_CRYPT_CRYPTOAPI)
-		memcpy(info->lo_name, info64->lo_crypt_name, LO_NAME_SIZE);
-	else
-		memcpy(info->lo_name, info64->lo_file_name, LO_NAME_SIZE);
-	memcpy(info->lo_encrypt_key, info64->lo_encrypt_key, LO_KEY_SIZE);
-
-	/* error in case values were truncated */
-	if (info->lo_device != info64->lo_device ||
-			info->lo_rdevice != info64->lo_rdevice ||
-			info->lo_inode != info64->lo_inode ||
-			info->lo_offset != info64->lo_offset)
-		return -EOVERFLOW;
-
-	return 0;
-}
-
-
 static int show_loop(char *device)
 {
-	struct loop_info loopinfo;
 	struct loop_info64 loopinfo64;
 	int fd, errsv;
 
@@ -101,23 +70,6 @@ static int show_loop(char *device)
 			printf(", encryption %s (type %d)",
 			       e, loopinfo64.lo_encrypt_type);
 		}
-		printf("\n");
-		close (fd);
-		return 0;
-	}
-
-	if (ioctl(fd, LOOP_GET_STATUS, &loopinfo) == 0) {
-		printf ("%s: [%04x]:%ld (%s)",
-			device, loopinfo.lo_device, loopinfo.lo_inode,
-			loopinfo.lo_name);
-
-		if (loopinfo.lo_offset)
-			printf(", offset %d", loopinfo.lo_offset);
-
-		if (loopinfo.lo_encrypt_type)
-			printf(", encryption type %d\n",
-			       loopinfo.lo_encrypt_type);
-
 		printf("\n");
 		close (fd);
 		return 0;
@@ -296,21 +248,8 @@ int set_loop(const char *device, const char *file, unsigned long long offset,
 	close (ffd);
 
 	i = ioctl(fd, LOOP_SET_STATUS64, &loopinfo64);
-	if (i) {
-		struct loop_info loopinfo;
-		int errsv = errno;
-
-		i = loop_info64_to_old(&loopinfo64, &loopinfo);
-		if (i) {
-			errno = errsv;
-			perror("ioctl: LOOP_SET_STATUS64");
-		} else {
-			i = ioctl(fd, LOOP_SET_STATUS, &loopinfo);
-			if (i)
-				perror("ioctl: LOOP_SET_STATUS");
-		}
-		memset(&loopinfo, 0, sizeof(loopinfo));
-	}
+	if (i)
+		perror("ioctl: LOOP_SET_STATUS64");
 	memset(&loopinfo64, 0, sizeof(loopinfo64));
 
 	if (i) {
