@@ -10,17 +10,15 @@ HOWTO sync branch:
 1) Generate mailbox of patches and fix up their paths:
 
  git format-patch --subject-prefix=klibc -N --stdout <changeset>.. \
+ | filterdiff --strip 2 --addoldprefix a/usr/dash/ --addnewprefix b/usr/dash/ \
+       --exclude="*/configure.ac" --exclude="*/ChangeLog" \
+       --exclude="*/dash.1" --exclude="*/Makefile.am" \
+       --exclude="*/mksignames.c" \
  > dash.mbox
-
-Path fixup:
- perl -i -pe 's#^([-+]{3} [ab]/)src/#$1#g' dash.mbox
 
 2) Import patches from mailbox:
 
- git am --directory="usr/dash" --exclude="usr/dash/configure.ac" \
-	--exclude="usr/dash/ChangeLog" --exclude="usr/dash/dash.1" \
-	--exclude="usr/dash/Makefile.am" --exclude="usr/dash/mksignames.c" \
-	--whitespace=fix -k -i -s ../dash/dash.mbox
+ git am --whitespace=fix -k -i -s ../dash/dash.mbox
 
 The only changes made are the addition of config.h, Kbuild usage,
 the omition of Changelog and manpage and automatic whitespace fixups.
