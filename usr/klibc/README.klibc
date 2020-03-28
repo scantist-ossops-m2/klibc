@@ -92,6 +92,13 @@ don't need the kernel source as well.  You can either:
 2. Set the KLIBCKERNELSRC variable on the "make" command line to
    point to the *parent* of the UAPI headers directory.
 
+Reproducible builds
+-------------------
+
+Static libraries usually contain file timestamps, which are not
+reproducible.  Set KBUILD_REPRODUCIBLE=1 on the "make" command line to
+disable this.
+
 Architecture support
 ====================
 
