@@ -15,8 +15,10 @@
 # debugging using gdb.
 #
 KLIBCARCHREQFLAGS = -m64
-KLIBCOPTFLAGS	+= -Os -fomit-frame-pointer -mno-sse \
-		-falign-functions=1 -falign-jumps=1 -falign-loops=1
+KLIBCOPTFLAGS     += -Os -fomit-frame-pointer -mno-sse \
+                     $(call cc-option,-falign-functions=1, )	\
+                     $(call cc-option,-falign-jumps=1, )	\
+                     $(call cc-option,-falign-loops=1, )
 ifeq ($(DEBUG),y)
 KLIBCOPTFLAGS     += -g
 else

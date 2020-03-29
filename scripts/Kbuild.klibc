@@ -69,6 +69,7 @@ include $(srctree)/scripts/Kbuild.include
 KLIBCREQFLAGS     := $(call cc-option, -fno-stack-protector, ) \
                      $(call cc-option, -fwrapv, ) \
                      $(call cc-option, -fno-PIE, ) \
+                     $(call cc-option, -fno-builtin-bcmp, ) \
                      -ggdb
 KLIBCARCHREQFLAGS :=
 KLIBCOPTFLAGS     :=
@@ -108,10 +109,14 @@ KLIBCOBJDUMP     := $(OBJDUMP)
 
 # klibc include paths
 KLIBCCPPFLAGS    := -nostdinc -iwithprefix include \
-		    -I$(KLIBCINC)/arch/$(KLIBCARCHDIR)	\
+                    -I$(KLIBCINC)/arch/$(KLIBCARCHDIR)	\
                     -I$(KLIBCINC)/bits$(KLIBCBITSIZE)	\
-		    -I$(KLIBCOBJ)/../include		\
+                    -I$(KLIBCOBJ)/../include		\
                     -I$(KLIBCINC)
+ifeq ($(cc-name),clang)
+KLIBCCPPFLAGS    += -I$(shell $(KLIBCCC) $(KLIBCCFLAGS) --print-file-name=include)
+endif
+
 # kernel include paths
 KLIBCKERNELSRC	 ?= $(srctree)
 KLIBCCPPFLAGS    += -I$(KLIBCKERNELSRC)/include		\
@@ -131,8 +136,8 @@ KLIBCCFLAGS      += $(KLIBCCPPFLAGS) $(KLIBCREQFLAGS) $(KLIBCARCHREQFLAGS)  \
 KLIBCAFLAGS      += -D__ASSEMBLY__ $(KLIBCCFLAGS)
 KLIBCSTRIPFLAGS  += --strip-all -R .comment -R .note
 
-KLIBCLIBGCC_DEF  := $(shell $(KLIBCCC) $(KLIBCCFLAGS) --print-libgcc)
-KLIBCLIBGCC	 ?= $(KLIBCLIBGCC_DEF)
+KLIBCLIBGCC_DEF  := $(shell $(KLIBCCC) $(KLIBCCFLAGS) $(if $(filter gcc,$(cc-name)),--print-libgcc,--print-libgcc-file-name))
+KLIBCLIBGCC      ?= $(KLIBCLIBGCC_DEF)
 KLIBCCRT0        := $(KLIBCOBJ)/arch/$(KLIBCARCHDIR)/crt0.o
 KLIBCLIBC        := $(KLIBCOBJ)/libc.a
 KLIBCCRTSHARED   := $(KLIBCOBJ)/interp.o
