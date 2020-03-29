@@ -70,6 +70,7 @@ KLIBCREQFLAGS     := $(call cc-option, -fno-stack-protector, ) \
                      $(call cc-option, -fwrapv, ) \
                      $(call cc-option, -fno-PIE, ) \
                      $(call cc-option, -fno-builtin-bcmp, ) \
+                     $(call cc-option, -fcommon, ) \
                      -ggdb
 KLIBCARCHREQFLAGS :=
 KLIBCOPTFLAGS     :=
