@@ -118,13 +118,16 @@ KLIBCCPPFLAGS    += -I$(KLIBCKERNELSRC)/include		\
                      $(if $(KBUILD_SRC),-I$(srctree)/include)  \
 		     $(KLIBCARCHINCFLAGS)
 
+# compiler/assembler option for whether we want an executable stack
+KLIBCSTACKFLAGS  := -Wa,$(if $(filter n,$(KLIBCEXECSTACK)),no)execstack
+
 # klibc definitions
 KLIBCDEFS        += -D__KLIBC__=$(KLIBCMAJOR)          \
 		    -D__KLIBC_MINOR__=$(KLIBCMINOR)    \
 		    -D_BITSIZE=$(KLIBCBITSIZE)
 KLIBCCPPFLAGS    += $(KLIBCDEFS)
 KLIBCCFLAGS      += $(KLIBCCPPFLAGS) $(KLIBCREQFLAGS) $(KLIBCARCHREQFLAGS)  \
-                    $(KLIBCOPTFLAGS) $(KLIBCWARNFLAGS)
+                    $(KLIBCOPTFLAGS) $(KLIBCSTACKFLGS) $(KLIBCWARNFLAGS)
 KLIBCAFLAGS      += -D__ASSEMBLY__ $(KLIBCCFLAGS)
 KLIBCSTRIPFLAGS  += --strip-all -R .comment -R .note
 

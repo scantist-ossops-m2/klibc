@@ -185,6 +185,7 @@ quiet_cmd_interp = BUILD   $@
       cmd_interp = $(KLIBCCC) $(klibccflags) -D__ASSEMBLY__     \
                              -DLIBDIR=\"$(SHLIBDIR)\"         \
 			     -DSOHASH=\"$(SOLIBHASH)\" \
+                             $(KLIBCSTACKFLAGS) \
 			     -c -o $@ $<
 
 $(INTERP_O): $(obj)/interp.S $(SOLIB).hash
