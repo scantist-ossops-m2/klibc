@@ -22,3 +22,6 @@ KLIBCSHAREDFLAGS     = -Ttext-segment 0x0f000000
 
 # The asm include files live in asm-powerpc
 KLIBCASMARCH	= powerpc
+
+# Kernel uses vDSO for signal return since 2.6.12
+KLIBCEXECSTACK := n

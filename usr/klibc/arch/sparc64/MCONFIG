@@ -19,3 +19,6 @@ KLIBCLDFLAGS      = -m elf64_sparc
 # Normal binaries start at 1 MB; the linker wants 1 MB alignment,
 # and call instructions have a 30-bit signed offset, << 2.
 KLIBCSHAREDFLAGS	= -Ttext-segment 0x80000000
+
+# Kernel has never used stack trampolines
+KLIBCEXECSTACK := n
