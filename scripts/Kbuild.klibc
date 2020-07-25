@@ -119,7 +119,7 @@ KLIBCCPPFLAGS    += -I$(KLIBCKERNELSRC)/include		\
 		     $(KLIBCARCHINCFLAGS)
 
 # compiler/assembler option for whether we want an executable stack
-KLIBCSTACKFLAGS  := -Wa,$(if $(filter n,$(KLIBCEXECSTACK)),no)execstack
+KLIBCSTACKFLAGS  := -Wa,--$(if $(filter n,$(KLIBCEXECSTACK)),no)execstack
 
 # klibc definitions
 KLIBCDEFS        += -D__KLIBC__=$(KLIBCMAJOR)          \
