@@ -6,3 +6,4 @@ void clearerr(FILE *__f)
 	__f->_IO_error = 0;
 	__f->_IO_eof = 0;
 }
+__ALIAS(void, clearerr_unlocked, (FILE *), clearerr)
