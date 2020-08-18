@@ -361,7 +361,7 @@ quiet_cmd_ld-shared = KLIBCLD $@
                        $(KLIBCEMAIN) $(KLIBCCRTSHARED)		\
                        --start-group				\
                        $(link-deps)				\
-                       -R $(KLIBCLIBCSHARED)			\
+                       --just-symbols $(KLIBCLIBCSHARED)	\
 	               $(KLIBCLIBGCC)				\
 		       --end-group ;				\
                       cp -f $@ $@.g ;				\
