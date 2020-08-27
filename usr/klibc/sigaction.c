@@ -3,6 +3,7 @@
  */
 
 #include <signal.h>
+#include <stddef.h>
 #include <sys/syscall.h>
 #include <klibc/sysconfig.h>
 
@@ -38,6 +39,13 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 #endif
 
 #if _KLIBC_USE_RT_SIG
+	/* Check that we have the right signal API definitions */
+	(void)sizeof(char[_NSIG >= 64 ? 1 : -1]);
+	(void)sizeof(char[sizeof(sigset_t) * 8 >= _NSIG ? 1 : -1]);
+	(void)sizeof(char[offsetof(struct sigaction, sa_mask)
+			  + sizeof(sigset_t) == sizeof(struct sigaction)
+			  ? 1 : -1]);
+
 # ifdef __sparc__
 	{
 		void (*restorer)(void);
