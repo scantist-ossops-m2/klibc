@@ -84,6 +84,9 @@ KLIBCCFLAGS       :=
 KLIBCARCHINCFLAGS =
 KLIBCCRTSHARED    := $(KLIBCOBJ)/interp.o
 
+LLD               := $(shell $(LD) --version 2>&1 | grep LLD)
+LD_IMAGE_BASE_OPT := $(if $(LLD),--image-base,-Ttext-segment)
+
 # Arch specific definitions for klibc
 include $(srctree)/$(KLIBCSRC)/arch/$(KLIBCARCHDIR)/MCONFIG
 
