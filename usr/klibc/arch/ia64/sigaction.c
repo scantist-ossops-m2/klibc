@@ -21,6 +21,7 @@ __extern int ____rt_sigaction(int, const struct sigaction *, struct sigaction *,
 int __rt_sigaction(int sig, struct sigaction *act,
 		   struct sigaction *oact, size_t size)
 {
+	sigset_t signal_mask, old_signal_mask;
 	uintptr_t old_entry;
 	int rv;
 
@@ -28,6 +29,13 @@ int __rt_sigaction(int sig, struct sigaction *act,
 		errno = EINVAL;
 		return -1;
 	}
+
+	/* Mask the signal to avoid races on access to its descriptor */
+	sigemptyset(&signal_mask);
+	sigaddset(&signal_mask, sig);
+	rv = sigprocmask(SIG_BLOCK, &signal_mask, &old_signal_mask);
+	if (rv)
+		return -1;
 
 	if (oact) {
 		old_entry = signal_descriptors[sig].entry;
@@ -40,6 +48,12 @@ int __rt_sigaction(int sig, struct sigaction *act,
 	}
 
 	rv = ____rt_sigaction(sig, act, oact, size);
+
+	if (rv)
+		signal_descriptors[sig].entry = old_entry;
+
+	/* Restore signal mask */
+	(void)sigprocmask(SIG_SETMASK, &old_signal_mask, NULL);
 
 	if (oact && oact->sa_handler != SIG_IGN &&
 	    oact->sa_handler != SIG_DFL) {
