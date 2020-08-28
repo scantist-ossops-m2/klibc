@@ -8,11 +8,17 @@
 #include <klibc/sysconfig.h>
 
 __extern void __sigreturn(void);
-#if _KLIBC_USE_RT_SIG
-__extern int __rt_sigaction(int, const struct sigaction *, struct sigaction *,
-			    size_t);
+
+#if _KLIBC_NEEDS_SIGACTION_FIXUP
+typedef struct sigaction *act_type;
 #else
-__extern int __sigaction(int, const struct sigaction *, struct sigaction *);
+typedef const struct sigaction *act_type;
+#endif
+
+#if _KLIBC_USE_RT_SIG
+__extern int __rt_sigaction(int, act_type, struct sigaction *, size_t);
+#else
+__extern int __sigaction(int, act_type, struct sigaction *);
 #endif
 
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
@@ -28,7 +34,9 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 	struct sigaction sa;
 	int rv;
 
-	if (act && (act->sa_flags & needed_flags) != needed_flags) {
+	if (act &&
+	    ((act->sa_flags & needed_flags) != needed_flags ||
+	     _KLIBC_NEEDS_SIGACTION_FIXUP)) {
 		sa = *act;
 		sa.sa_flags |= needed_flags;
 #if _KLIBC_NEEDS_SA_RESTORER
@@ -46,9 +54,9 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 			  + sizeof(sigset_t) == sizeof(struct sigaction)
 			  ? 1 : -1]);
 
-	rv = __rt_sigaction(sig, act, oact, sizeof(sigset_t));
+	rv = __rt_sigaction(sig, (act_type)act, oact, sizeof(sigset_t));
 #else
-	rv = __sigaction(sig, act, oact);
+	rv = __sigaction(sig, (act_type)act, oact);
 #endif
 
 #if _KLIBC_NEEDS_SA_RESTORER
