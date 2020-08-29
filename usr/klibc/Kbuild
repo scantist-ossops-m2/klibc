@@ -208,3 +208,6 @@ ifdef KLIBCSHAREDFLAGS
 	$(Q)$(install-lib) $(obj)/klibc-$(SOLIBHASH).so \
 	                      $(INSTALLROOT)$(SHLIBDIR)
 endif
+
+# Directories to visit during clean and install
+subdir- := arch/$(KLIBCARCHDIR)/

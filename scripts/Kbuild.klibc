@@ -82,6 +82,7 @@ KLIBCCFLAGS       :=
 
 # Defaults for arch to override
 KLIBCARCHINCFLAGS =
+KLIBCCRTSHARED    := $(KLIBCOBJ)/interp.o
 
 # Arch specific definitions for klibc
 include $(srctree)/$(KLIBCSRC)/arch/$(KLIBCARCHDIR)/MCONFIG
@@ -141,7 +142,6 @@ KLIBCLIBGCC_DEF  := $(shell $(KLIBCCC) $(KLIBCCFLAGS) $(if $(filter gcc,$(cc-nam
 KLIBCLIBGCC      ?= $(KLIBCLIBGCC_DEF)
 KLIBCCRT0        := $(KLIBCOBJ)/arch/$(KLIBCARCHDIR)/crt0.o
 KLIBCLIBC        := $(KLIBCOBJ)/libc.a
-KLIBCCRTSHARED   := $(KLIBCOBJ)/interp.o
 KLIBCLIBCSHARED  := $(KLIBCOBJ)/libc.so
 # How to tell the linker main() is the entrypoint
 KLIBCEMAIN	 ?= -e main
