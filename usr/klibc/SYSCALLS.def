@@ -270,6 +270,7 @@ int uname(struct utsname *);
 int setdomainname(const char *, size_t);
 int sethostname(const char *, size_t);
 long init_module(void *, unsigned long, const char *);
+long finit_module(int, const char *, int);
 long delete_module(const char *, unsigned int);
 int reboot::__reboot(int, int, int, void *);
 int syslog::klogctl(int, char *, int);
