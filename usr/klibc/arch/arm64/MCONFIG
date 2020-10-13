@@ -20,7 +20,7 @@ KLIBCREQFLAGS += -fno-exceptions -mgeneral-regs-only
 
 # On arm64, binaries are normally loaded at 4MB. Place klibc.so
 # a little before that at 2MB to prevent overlap.
-KLIBCSHAREDFLAGS = -Ttext-segment 0x0200000
+KLIBCSHAREDFLAGS = $(LD_IMAGE_BASE_OPT) 0x0200000
 
 # Kernel has never used stack trampolines
 KLIBCEXECSTACK := n
