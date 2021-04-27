@@ -102,11 +102,7 @@ KLIBCLD          := $(LD)
 KLIBCCC          := $(CC)
 KLIBCAR          := $(AR)
 
-# klibc-ar is a macro that invokes KLIBCAR and takes 2 arguments of ar commands.
-# The second will be used for reproducible builds, the first otherwise.
-klibc-ar = $(KLIBCAR) $(if $(KBUILD_REPRODUCIBLE),$(2),$(1))
-
-KLIBCRANLIB      := $(RANLIB) $(if $(KBUILD_REPRODUCIBLE),-D)
+KLIBCRANLIB      := $(RANLIB) -D
 KLIBCSTRIP       := $(if $(CONFIG_DEBUG_INFO),true,$(STRIP))
 KLIBCNM          := $(NM)
 KLIBCOBJCOPY     := $(OBJCOPY)
@@ -286,8 +282,8 @@ ifdef lib-target
 quiet_cmd_link_o_target = LD      $@
 # If the list of objects to link is empty, just create an empty lib.a
 cmd_link_o_target = $(if $(strip $(lib-y)),\
-                    rm -f $@; $(call klibc-ar,cru,Dcr) $@ $(filter $(lib-y), $^),\
-                    rm -f $@; $(call klibc-ar,crs,Dcrs) $@)
+                    rm -f $@; $(KLIBCAR) Dcr $@ $(filter $(lib-y), $^),\
+                    rm -f $@; $(KLIBCAR) Dcrs $@)
 
 $(lib-target): $(lib-y) FORCE
 	$(call if_changed,link_o_target)
